@@ -1,8 +1,9 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
 from pathlib import Path
 
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).parent.parent
+
 
 class PostgresSettings(BaseSettings):
     POSTGRES_USER: str = ''
@@ -11,7 +12,9 @@ class PostgresSettings(BaseSettings):
     POSTGRES_HOST: str = ''
     POSTGRES_PORT: int = 5432
 
-    model_config = SettingsConfigDict(env_file=f'{BASE_DIR}/environment/.env', extra='ignore')
+    model_config = SettingsConfigDict(
+        env_file=f'{BASE_DIR}/environment/.env', extra='ignore'
+    )
 
     @property
     def POSTGRES_URL(self) -> str:
@@ -22,6 +25,7 @@ class PostgresSettings(BaseSettings):
             f':{self.POSTGRES_PORT}'
             f'/{self.POSTGRES_DB}'
         )
+
 
 class Settings(BaseSettings):
     postgres: PostgresSettings = PostgresSettings()
