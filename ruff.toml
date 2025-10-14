@@ -11,3 +11,5 @@ fixable = ["ALL"]
 
 [format]
 quote-style = "single"
+docstring-code-format = true
+docstring-code-line-length = 120
