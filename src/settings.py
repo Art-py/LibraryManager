@@ -41,7 +41,7 @@ class PostgresSettings(CoreBaseSettings):
 
 
 class Settings(CoreBaseSettings):
-    DEBUG: bool
+    DEBUG: bool = True
 
     postgres: PostgresSettings = PostgresSettings()
 
