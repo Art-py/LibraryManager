@@ -8,11 +8,14 @@ list: ## Показать список всех команд
 start-dev: ## Запуск сервиса в режиме разработки (с авто-перезагрузкой)
 	uvicorn src.main:app --reload
 
+.PHONY: format
+format: ## Форматирование кода
+	ruff format .
+	ruff check . --select I --fix
+
 .PHONY: linter
-linter: ## Проверка стиля кода
-	ruff format
-	ruff check --fix --select I001
-	ruff check src/
+linter: ## Проверка стиля и удаление неиспользуемых импортов
+	ruff check . --fix
 
 .PHONY: test
 test: ## Запуск тестов
