@@ -16,7 +16,7 @@ linter: ## Проверка стиля кода
 
 .PHONY: test
 test: ## Запуск тестов
-	pytest -s tests/
+	pytest -s test/
 
 .PHONY: migrate
 migrate: ## Создание новой миграции: make migrate m="description"
