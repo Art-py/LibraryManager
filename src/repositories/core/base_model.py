@@ -6,9 +6,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
 class BaseModel(DeclarativeBase):
-    """
-    Базовый класс для моделей sqlAlchemy
-    """
+    """Базовый класс для моделей sqlAlchemy"""
 
     __abstract__ = True
 
@@ -16,9 +14,7 @@ class BaseModel(DeclarativeBase):
 
 
 class CreatedAtMixin:
-    """
-    Добавляет created_at с временем создания
-    """
+    """Добавляет created_at с временем создания"""
 
     created_at: Mapped[DateTime] = mapped_column(
         DateTime(timezone=True),
@@ -28,9 +24,7 @@ class CreatedAtMixin:
 
 
 class UpdatedAtMixin:
-    """
-    Добавляет updated_at с временем обновления
-    """
+    """Добавляет updated_at с временем обновления"""
 
     updated_at: Mapped[DateTime] = mapped_column(
         DateTime(timezone=True),
@@ -41,8 +35,6 @@ class UpdatedAtMixin:
 
 
 class TimestampsMixin(CreatedAtMixin, UpdatedAtMixin):
-    """
-    Добавляет created_at и updated_at с временем создания/обновления
-    """
+    """Добавляет created_at и updated_at с временем создания/обновления"""
 
     pass
