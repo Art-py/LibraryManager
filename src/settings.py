@@ -7,9 +7,7 @@ BASE_DIR = Path(__file__).parent.parent
 
 
 class CoreBaseSettings(BaseSettings):
-    model_config = SettingsConfigDict(
-        env_file=f'{BASE_DIR}/environment/.env', extra='ignore'
-    )
+    model_config = SettingsConfigDict(env_file=f'{BASE_DIR}/environment/.env', extra='ignore')
 
 
 class PostgresSettings(CoreBaseSettings):

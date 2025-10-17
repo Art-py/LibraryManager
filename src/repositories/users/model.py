@@ -1,8 +1,9 @@
-from sqlalchemy import String, Enum
+from sqlalchemy import Enum, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from repositories.users.enum import UserRole
 from src.repositories.core.base_model import BaseModel, TimestampsMixin
+
 
 class User(BaseModel, TimestampsMixin):
     """Модель пользователей"""

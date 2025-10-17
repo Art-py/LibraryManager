@@ -2,7 +2,6 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
-
 app = FastAPI(
     title='Library Manager',
 )
