@@ -8,7 +8,7 @@
 - настройка Alembic + SQLAlchemy (async);
 - добавление .env, pydantic Settings;
 - docker и docker-compose (PostgreSQL + PG_admin + приложение);
-- базовая модель `User` (id, name, email, role);
+- базовая модель `User` (uid, fio, email, role);
 - CRUD для пользователей;
 - JWT авторизация (fastapi-users);
 - юнит-тесты (pytest + httpx).
