@@ -1,18 +1,20 @@
 
 services:
-  web:
+  backend:
     build: .
     entrypoint: /app/entrypoint.sh
     container_name: LM_backend
     ports:
       - "8000:8000"
+    volumes:
+      - ./alembic:/app/alembic
     env_file:
       - environment/.env
     depends_on:
-      db:
+      postgres_db:
         condition: service_healthy
 
-  db:
+  postgres_db:
     image: postgres:18
     container_name: LM_postgres_db
     env_file:
@@ -35,7 +37,7 @@ services:
     ports:
       - "5050:80"
     depends_on:
-      db:
+      postgres_db:
         condition: service_healthy
 
 volumes:
