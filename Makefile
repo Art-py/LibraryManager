@@ -1,12 +1,27 @@
+DC_COMP := docker-compose
+SERVICE := backend
+
 .PHONY: list
 list: ## Показать список всех команд
 	@echo "Доступные команды:"
 	@echo
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-.PHONY: start-dev
-start-dev: ## Запуск сервиса в режиме разработки (с авто-перезагрузкой)
-	uvicorn src.main:app --reload
+.PHONY: build
+build:  ## Билд проекта
+	$(DC_COMP) build
+
+.PHONY: up
+up:  ## Запустить проект в контейнере докера
+	$(DC_COMP) up -d
+
+.PHONY: stop
+stop:  ## Остановить контейнеры докера
+	$(DC_COMP) stop
+
+.PHONY: down
+down:  ## Удалить контейнеры
+	$(DC_COMP) down -v
 
 .PHONY: format
 format: ## Форматирование кода
@@ -23,12 +38,12 @@ test: ## Запуск тестов
 
 .PHONY: migrate
 migrate: ## Создание новой миграции: make migrate m="description"
-	poetry run alembic revision --autogenerate -m "$(m)"
+	$(DC_COMP) exec $(SERVICE) poetry run alembic revision --autogenerate -m "$(m)"
 
 .PHONY: upgrade
 upgrade: ## Применение всех миграций
-	poetry run alembic upgrade head
+	$(DC_COMP) exec $(SERVICE) poetry run alembic upgrade head
 
 .PHONY: downgrade
 downgrade: ## Откат последней миграции
-	poetry run alembic downgrade -1
+	$(DC_COMP) exec $(SERVICE) poetry run alembic downgrade -1
