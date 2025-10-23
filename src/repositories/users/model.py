@@ -1,10 +1,9 @@
+from fastapi_users.db import SQLAlchemyBaseUserTableUUID
 from sqlalchemy import Enum, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from repositories.users.enum import UserRole
 from src.repositories.core.base_model import BaseModel, TimestampsMixin
-
-from fastapi_users.db import SQLAlchemyBaseUserTableUUID
 
 
 class User(BaseModel, SQLAlchemyBaseUserTableUUID, TimestampsMixin):
