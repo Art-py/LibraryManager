@@ -27,8 +27,8 @@ class BaseModel(DeclarativeBase):
     metadata = MetaData(naming_convention=CONVENTION)
 
 
-class BaseModelUID(BaseModel):
-    """Базовый класс для моделей sqlAlchemy с uid полем"""
+class UIDMixin:
+    """Добавляет uid поле"""
 
     uid: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid6.uuid7, doc='Внутренний идентификатор'
