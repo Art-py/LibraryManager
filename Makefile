@@ -36,12 +36,12 @@ linter: ## Проверка стиля и удаление неиспользу�
 test: ## Запуск тестов
 	pytest -s test/
 
-.PHONY: migrate
-migrate: ## Создание новой миграции: make migrate m="description"
+.PHONY: migrations
+migrations: ## Создание новой миграции: make migrations m="description"
 	$(DC_COMP) exec $(SERVICE) poetry run alembic revision --autogenerate -m "$(m)"
 
-.PHONY: upgrade
-upgrade: ## Применение всех миграций
+.PHONY: migrate
+migrate: ## Применение всех миграций
 	$(DC_COMP) exec $(SERVICE) poetry run alembic upgrade head
 
 .PHONY: downgrade
