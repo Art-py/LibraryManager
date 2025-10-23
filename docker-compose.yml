@@ -14,7 +14,7 @@ services:
         condition: service_healthy
 
   postgres_db:
-    image: postgres:18
+    image: postgres:17
     container_name: LM_postgres_db
     ports:
       - "5432:5432"
