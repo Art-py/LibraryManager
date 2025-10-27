@@ -8,9 +8,10 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
 from src.repositories.utils.utils import camel_case_to_snake_case
 
 CONVENTION = {
-    'ix': 'ix_%(table_name)s_%(column_0_N_name)s',
-    'uq': 'uq_%(table_name)s_%(column_0_N_name)s',
-    'fk': 'fk_%(table_name)s_%(column_0_N_name)s_%(referred_table_name)s',
+    'ix': 'ix_%(column_0_label)s',
+    'uq': 'uq_%(table_name)s_%(column_0_name)s',
+    'ck': 'ck_%(table_name)s_%(constraint_name)s',
+    'fk': 'fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s',
     'pk': 'pk_%(table_name)s',
 }
 
@@ -20,19 +21,15 @@ class BaseModel(DeclarativeBase):
 
     __abstract__ = True
 
+    uid: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid6.uuid7, doc='Внутренний идентификатор'
+    )
+
     @declared_attr.directive
     def __tablename__(cls) -> str:
         return f'{camel_case_to_snake_case(cls.__name__)}s'
 
     metadata = MetaData(naming_convention=CONVENTION)
-
-
-class UIDMixin:
-    """Добавляет uid поле"""
-
-    uid: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid6.uuid7, doc='Внутренний идентификатор'
-    )
 
 
 class CreatedAtMixin:
@@ -60,12 +57,3 @@ class TimestampsMixin(CreatedAtMixin, UpdatedAtMixin):
     """Добавляет created_at и updated_at с временем создания/обновления"""
 
     pass
-
-    #
-    # @property
-    # def uid(self):
-    #     return self.id
-    #
-    # @uid.setter
-    # def uid(self, value):
-    #     self.id = value
