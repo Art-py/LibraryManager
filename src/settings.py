@@ -37,11 +37,17 @@ class PostgresSettings(CoreBaseSettings):
             f'/{self.POSTGRES_DB}'
         )
 
+class UserAdminSettings(CoreBaseSettings):
+    USER_ADMIN_EMAIL: str = ''
+    USER_ADMIN_PASSWORD: SecretStr = ''
+
 
 class Settings(CoreBaseSettings):
     DEBUG: bool = True
+    SECRET_KEY_PASSWORD: SecretStr = ''
 
     postgres: PostgresSettings = PostgresSettings()
+    user_admin: UserAdminSettings = UserAdminSettings()
 
 
 settings = Settings()
