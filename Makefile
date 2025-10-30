@@ -9,7 +9,7 @@ list: ## Показать список всех команд
 
 .PHONY: build
 build:  ## Билд проекта
-	$(DC_COMP) build
+	$(DC_COMP) build --no-cache
 
 .PHONY: up
 up:  ## Запустить проект в контейнере докера
