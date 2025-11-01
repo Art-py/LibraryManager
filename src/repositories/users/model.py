@@ -1,4 +1,3 @@
-# from fastapi_users.db import SQLAlchemyBaseUserTableUUID
 from sqlalchemy import Boolean, Enum, String
 from sqlalchemy.orm import Mapped, mapped_column
 
