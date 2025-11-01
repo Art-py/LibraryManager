@@ -1,7 +1,7 @@
 from passlib.context import CryptContext
 from pydantic.types import SecretStr
 
-from settings import settings
+from src.settings import settings
 
 
 

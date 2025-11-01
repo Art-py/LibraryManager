@@ -5,7 +5,7 @@ from repositories.users.enum import UserRole
 from repositories.users.model import User
 from repositories.users.security import SecurityService
 
-from settings import settings
+from src.settings import settings
 
 
 security_service = SecurityService()

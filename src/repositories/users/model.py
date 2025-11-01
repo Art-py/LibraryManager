@@ -1,7 +1,7 @@
 from sqlalchemy import Boolean, Enum, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from repositories.users.enum import UserRole
+from src.repositories.users.enum import UserRole
 from src.repositories.core.base_model import BaseModel, TimestampsMixin
 
 
