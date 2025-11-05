@@ -33,8 +33,8 @@ async def create_user_admin():
         session.add(user)
         await session.commit()
 
-        return f'Admin user created: email={reg_data["email"]}'
+        return f'User admin has been added...'
 
 
 if __name__ == '__main__':
-    asyncio.run(create_user_admin())
+    print(asyncio.run(create_user_admin()))
