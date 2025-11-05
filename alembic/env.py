@@ -6,18 +6,22 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
-from src.settings import settings
 from src.repositories.core.base_model import BaseModel
 from src.repositories.users.model import User  # noqa F401
+from src.settings import settings
+
+PLACEHOLDER_URL = 'driver://user:pass@localhost/dbname'
+
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-config.set_section_option(
-    section='alembic',
-    name='sqlalchemy.url',
-    value=settings.postgres.POSTGRES_ASYNC_URL,
-)
+if config.get_main_option('sqlalchemy.url') == PLACEHOLDER_URL:
+    config.set_section_option(
+        section='alembic',
+        name='sqlalchemy.url',
+        value=settings.postgres.POSTGRES_ASYNC_URL,
+    )
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.

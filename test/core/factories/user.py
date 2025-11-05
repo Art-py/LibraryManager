@@ -7,7 +7,6 @@ from src.repositories.users.enum import UserRole
 from src.repositories.users.model import User
 from src.repositories.users.security import SecurityService
 
-
 security_service = SecurityService()
 
 
@@ -21,7 +20,9 @@ class UserFactory(Factory):
     last_name = LazyFunction(lambda: faker.last_name())
 
     email = LazyFunction(lambda: faker.email())
-    hashed_password = LazyFunction(lambda: security_service.get_hashed_password(SecretStr(faker.password(length=10))))
+    hashed_password = LazyFunction(
+        lambda: security_service.get_hashed_password_sync(SecretStr(faker.password(length=10)))
+    )
 
     role = FuzzyChoice([role.value for role in UserRole])
 

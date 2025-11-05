@@ -2,8 +2,8 @@ from uuid import UUID
 
 from sqlalchemy import select
 
-from repositories.core.base_repository_model import BaseRepository
-from repositories.users.model import User
+from src.repositories.core.base_repository_model import BaseRepository
+from src.repositories.users.model import User
 
 
 class UserRepository(BaseRepository):
