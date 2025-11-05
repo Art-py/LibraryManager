@@ -26,7 +26,7 @@ async def postgres_container():
         container.stop()
 
 
-@pytest_asyncio.fixture(scope='session')
+@pytest_asyncio.fixture(scope='function')
 async def test_engine(postgres_container):
     """Создаем асинхронный SQLAlchemy engine на контейнере"""
     url = postgres_container.get_connection_url().replace('postgresql+psycopg2', 'postgresql+asyncpg')
@@ -45,7 +45,7 @@ async def apply_migrations(postgres_container):
     yield
 
 
-@pytest_asyncio.fixture()
+@pytest_asyncio.fixture(scope='function')
 async def sql_test_session(test_engine, apply_migrations) -> AsyncSession:
     """Создаем отдельную сессию для каждого теста"""
     async_session_maker = async_sessionmaker(test_engine, expire_on_commit=False)
