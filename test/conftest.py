@@ -1,5 +1,8 @@
+import asyncio
 from asyncio import to_thread
+from collections.abc import Generator
 
+import pytest
 import pytest_asyncio
 from alembic.config import Config
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
@@ -11,6 +14,13 @@ from alembic import command
 pytest_plugins = [
     'test.core.fixtures.user',
 ]
+
+
+@pytest.fixture(scope='session')
+def event_loop(request) -> Generator:
+    loop = asyncio.get_event_loop_policy().new_event_loop()
+    yield loop
+    loop.close()
 
 
 @pytest_asyncio.fixture(scope='session')
@@ -26,15 +36,6 @@ async def postgres_container():
         container.stop()
 
 
-@pytest_asyncio.fixture(scope='function')
-async def test_engine(postgres_container):
-    """Создаем асинхронный SQLAlchemy engine на контейнере"""
-    url = postgres_container.get_connection_url().replace('postgresql+psycopg2', 'postgresql+asyncpg')
-    engine = create_async_engine(url, echo=False)
-    yield engine
-    await engine.dispose()
-
-
 @pytest_asyncio.fixture(scope='session')
 async def apply_migrations(postgres_container):
     """Применяем миграции Alembic к тестовой БД"""
@@ -45,7 +46,16 @@ async def apply_migrations(postgres_container):
     yield
 
 
-@pytest_asyncio.fixture(scope='function')
+@pytest_asyncio.fixture()
+async def test_engine(postgres_container):
+    """Создаем асинхронный SQLAlchemy engine на контейнере"""
+    url = postgres_container.get_connection_url().replace('postgresql+psycopg2', 'postgresql+asyncpg')
+    engine = create_async_engine(url, echo=False)
+    yield engine
+    await engine.dispose()
+
+
+@pytest_asyncio.fixture()
 async def sql_test_session(test_engine, apply_migrations) -> AsyncSession:
     """Создаем отдельную сессию для каждого теста"""
     async_session_maker = async_sessionmaker(test_engine, expire_on_commit=False)

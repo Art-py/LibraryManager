@@ -1,12 +1,15 @@
 import pytest
 import pytest_asyncio
 import uuid6
+from faker.proxy import Faker
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.repositories.users.enum import UserRole
 from src.repositories.users.model import User
 from src.repositories.users.repository import UserRepository
 from test.core.utils import model_to_dict
+
+faker = Faker(locale='ru')
 
 
 async def assert_models_equal(obj1, obj2, exclude: set[str] = None):
@@ -32,14 +35,32 @@ class TestUsers:
         user: User,
     ):
         result = await repository.get_by_uid(user.uid)
+        assert result is not None
         await assert_models_equal(user, result, exclude={'created_at', 'updated_at'})
 
     @pytest.mark.asyncio
-    @pytest.mark.parametrize('user', [{'role': UserRole.READER}], indirect=True)
     async def test_get_user_by_wrong_uid(
+        self,
+        repository: UserRepository,
+    ):
+        result = await repository.get_by_uid(uuid6.uuid7())
+        assert result is None
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('user', [{'role': UserRole.READER}], indirect=True)
+    async def test_get_user_by_email(
         self,
         repository: UserRepository,
         user: User,
     ):
-        result = await repository.get_by_uid(uuid6.uuid7())
+        result = await repository.get_by_email(user.email)
+        assert result is not None
+        await assert_models_equal(user, result, exclude={'created_at', 'updated_at'})
+
+    @pytest.mark.asyncio
+    async def test_get_user_by_wrong_email(
+        self,
+        repository: UserRepository,
+    ):
+        result = await repository.get_by_email(faker.email())
         assert result is None
