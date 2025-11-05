@@ -31,13 +31,15 @@ class TestUsers:
         repository: UserRepository,
         user: User,
     ):
-        user_from_bd = await repository.get_by_uid(user.uid)
-        await assert_models_equal(user, user_from_bd, exclude={'created_at', 'updated_at'})
+        result = await repository.get_by_uid(user.uid)
+        await assert_models_equal(user, result, exclude={'created_at', 'updated_at'})
 
     @pytest.mark.asyncio
+    @pytest.mark.parametrize('user', [{'role': UserRole.READER}], indirect=True)
     async def test_get_user_by_wrong_uid(
         self,
         repository: UserRepository,
+        user: User,
     ):
-        its_none_obj = await repository.get_by_uid(uuid6.uuid7())
-        assert its_none_obj is None
+        result = await repository.get_by_uid(uuid6.uuid7())
+        assert result is None
