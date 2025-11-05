@@ -6,7 +6,7 @@ from src.repositories.users.model import User
 from test.core.factories.user import UserFactory
 
 
-@pytest_asyncio.fixture()
+@pytest_asyncio.fixture(scope='function')
 async def user(
     request: pytest.FixtureRequest,
     sql_test_session: AsyncSession,
