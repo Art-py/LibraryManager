@@ -10,7 +10,7 @@
 - docker и docker-compose (PostgreSQL + PG_admin + приложение);
 - базовая модель `User` (uid, fio, email, role);
 - CRUD для пользователей;
-- JWT авторизация (fastapi-users);
+- JWT авторизация;
 - юнит-тесты (pytest + httpx).
 ---
 ### v0.2 — Каталог книг
