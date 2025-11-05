@@ -34,7 +34,7 @@ linter: ## Проверка стиля и удаление неиспользу�
 
 .PHONY: test
 test: ## Запуск тестов
-	pytest -s test/
+	pytest -W 'ignore' -s test/
 
 .PHONY: migrations
 migrations: ## Создание новой миграции: make migrations m="description"
