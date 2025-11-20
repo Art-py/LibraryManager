@@ -2,9 +2,13 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
+from src.adapters.api import routers_v1
+
 app = FastAPI(
     title='Library Manager',
 )
+
+app.include_router(routers_v1, prefix='/api')
 
 
 @app.get(path='/healthcheck', tags=['System'])
