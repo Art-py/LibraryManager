@@ -31,9 +31,13 @@ async def create_user_admin():
 
         user = User(**reg_data)
         session.add(user)
-        await session.commit()
 
-        return f'User admin has been added...'
+        try:
+            await session.commit()
+        except Exception:
+            return 'User was created...'
+
+        return 'User admin has been added...'
 
 
 if __name__ == '__main__':
