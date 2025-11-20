@@ -18,3 +18,8 @@ class UserRepository(BaseRepository):
         """Получить пользователя по email"""
         result = await self._session.execute(select(User).where(User.email == user_email))
         return result.scalar_one_or_none()
+
+    async def create(self, user: User) -> User:
+        """Создание пользователя"""
+        self._session.add(user)
+        return user
