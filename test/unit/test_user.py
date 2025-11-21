@@ -6,7 +6,6 @@ from fastapi import status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.repositories.core.exceptions.http_exceptions import NotFoundException
-from src.repositories.users.enum import UserRole
 from src.repositories.users.model import User
 from src.repositories.users.repository import UserRepository
 from test.core.utils import model_to_dict
@@ -30,7 +29,6 @@ async def repository(sql_test_session: AsyncSession) -> UserRepository:
 
 class TestUsers:
     @pytest.mark.asyncio
-    @pytest.mark.parametrize('user', [{'role': UserRole.READER}], indirect=True)
     async def test_get_user_by_uid(
         self,
         repository: UserRepository,
@@ -52,7 +50,6 @@ class TestUsers:
         assert exc.value.detail == 'User not found'
 
     @pytest.mark.asyncio
-    @pytest.mark.parametrize('user', [{'role': UserRole.READER}], indirect=True)
     async def test_get_user_by_email(
         self,
         repository: UserRepository,
