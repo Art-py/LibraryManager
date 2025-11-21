@@ -5,10 +5,13 @@ from collections.abc import Generator
 import pytest
 import pytest_asyncio
 from alembic.config import Config
+from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from testcontainers.postgres import PostgresContainer
 
 from alembic import command
+from src.db import get_async_session
+from src.main import app
 
 # Инициализация фикстур
 pytest_plugins = [
@@ -62,3 +65,20 @@ async def sql_test_session(test_engine, apply_migrations) -> AsyncSession:
     async with async_session_maker() as session:
         yield session
         await session.rollback()
+
+
+@pytest_asyncio.fixture()
+async def override_get_db_fixture(sql_test_session: AsyncSession):
+    async def override_get_db():
+        yield sql_test_session
+
+    app.dependency_overrides[get_async_session] = override_get_db
+    yield
+    app.dependency_overrides.clear()
+
+
+@pytest_asyncio.fixture()
+async def client(override_get_db_fixture):
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url='http://test') as ac:
+        yield ac
