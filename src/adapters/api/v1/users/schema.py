@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 
 from repositories.users.enum import UserRole
 
@@ -13,16 +13,18 @@ class UserBase(BaseModel):
     email: EmailStr
 
 
-class UserCreate(BaseModel):
+class UserCreate(UserBase):
     password: str
     password_confirm: str
-
-    role: UserRole = UserRole.READER
-
-    is_active: bool = False
-    is_superuser: bool = False
-    is_verified: bool = False
 
 
 class UserResponse(UserBase):
     uid: UUID
+
+    role: UserRole
+
+    is_active: bool
+    is_superuser: bool
+    is_verified: bool
+
+    model_config = ConfigDict(from_attributes=True, use_enum_values=True)

@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, status
@@ -6,10 +6,23 @@ from fastapi import APIRouter, Depends, status
 from adapters.api.v1.users.schema import UserResponse
 from repositories.users.repository import UserRepository
 
-router = APIRouter(prefix='/users/{user_uid}', tags=['Пользователи'])
+router = APIRouter(prefix='/users', tags=['Пользователи'])
 
 
-@router.get(path='', response_model=UserResponse, status_code=status.HTTP_200_OK)
+@router.get(
+    path='/{user_uid}',
+    response_model=UserResponse,
+    responses={
+        status.HTTP_200_OK: {
+            'model': UserResponse,
+            'description': 'User info',
+        },
+        status.HTTP_404_NOT_FOUND: {
+            'description': 'User not found',
+        },
+    },
+    status_code=status.HTTP_200_OK,
+)
 async def user(
     user_uid: UUID,
     repository: Annotated[UserRepository, Depends(UserRepository.get_dependency)],
