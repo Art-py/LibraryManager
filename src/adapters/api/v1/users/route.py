@@ -3,8 +3,8 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, status
 
-from adapters.api.v1.users.schema import UserResponse
-from repositories.users.repository import UserRepository
+from src.adapters.api.v1.users.schema import UserResponse
+from src.repositories.users.repository import UserRepository
 
 router = APIRouter(prefix='/users', tags=['Пользователи'])
 
