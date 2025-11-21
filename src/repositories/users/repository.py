@@ -2,8 +2,8 @@ from uuid import UUID
 
 from sqlalchemy import select
 
-from src.repositories.core.exceptions.http_exceptions import NotFoundException
 from src.repositories.core.base_repository_model import BaseRepository
+from src.repositories.core.exceptions.http_exceptions import NotFoundException
 from src.repositories.users.model import User
 
 

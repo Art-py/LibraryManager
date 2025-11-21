@@ -2,6 +2,7 @@ import pytest
 import pytest_asyncio
 import uuid6
 from faker.proxy import Faker
+from fastapi import status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.repositories.core.exceptions.http_exceptions import NotFoundException
@@ -45,7 +46,10 @@ class TestUsers:
         repository: UserRepository,
     ):
         with pytest.raises(NotFoundException) as exc:
-            result = await repository.get_by_uid(uuid6.uuid7())
+            await repository.get_by_uid(uuid6.uuid7())
+
+        assert exc.value.status_code == status.HTTP_404_NOT_FOUND
+        assert exc.value.detail == 'User not found'
 
     @pytest.mark.asyncio
     @pytest.mark.parametrize('user', [{'role': UserRole.READER}], indirect=True)
