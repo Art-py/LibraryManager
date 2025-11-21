@@ -1,9 +1,9 @@
 from fastapi import status
 
-from src.repositories.core.base_exception import BaseHTTPException
+from src.repositories.core.base_exception import BaseException
 
 
-class DBConflictException(BaseHTTPException):
+class DBConflictException(BaseException):
     """Базовый класс для эксепшенов при работе с БД"""
 
     def __init__(self, message: str, code: int = status.HTTP_409_CONFLICT):
