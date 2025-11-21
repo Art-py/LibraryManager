@@ -4,6 +4,7 @@ import uuid6
 from faker.proxy import Faker
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.repositories.core.exceptions.http_exceptions import NotFoundException
 from src.repositories.users.enum import UserRole
 from src.repositories.users.model import User
 from src.repositories.users.repository import UserRepository
@@ -43,8 +44,8 @@ class TestUsers:
         self,
         repository: UserRepository,
     ):
-        result = await repository.get_by_uid(uuid6.uuid7())
-        assert result is None
+        with pytest.raises(NotFoundException) as exc:
+            result = await repository.get_by_uid(uuid6.uuid7())
 
     @pytest.mark.asyncio
     @pytest.mark.parametrize('user', [{'role': UserRole.READER}], indirect=True)
