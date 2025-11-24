@@ -34,3 +34,6 @@ class TestUsersService:
         assert created_user.first_name == create_data['first_name']
         assert created_user.last_name == create_data['last_name']
         assert created_user.email == create_data['email']
+        assert not created_user.is_active
+        assert not created_user.is_superuser
+        assert created_user.is_verified
