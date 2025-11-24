@@ -1,12 +1,35 @@
-from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, status
 
-from src.adapters.api.v1.users.schema import UserResponse
+from src.applications.users.service import UserService
 from src.repositories.users.repository import UserRepository
+from src.repositories.users.schema import UserCreate, UserResponse
 
 router = APIRouter(prefix='/users', tags=['Пользователи'])
+
+
+@router.post(
+    path='/register',
+    response_model=UserResponse,
+    responses={
+        status.HTTP_200_OK: {
+            'model': UserResponse,
+            'description': 'User info',
+        },
+        status.HTTP_401_UNAUTHORIZED: {
+            'description': 'Password not confirm',
+        },
+        status.HTTP_409_CONFLICT: {
+            'description': 'User is already registered',
+        },
+    },
+)
+async def user_register(
+    user_data: UserCreate,
+    service: UserService = Depends(UserService.get_dependency),
+):
+    return await service.user_create(user_data)
 
 
 @router.get(
@@ -23,8 +46,8 @@ router = APIRouter(prefix='/users', tags=['Пользователи'])
     },
     status_code=status.HTTP_200_OK,
 )
-async def user(
+async def user_get_by_uid(
     user_uid: UUID,
-    repository: Annotated[UserRepository, Depends(UserRepository.get_dependency)],
+    repository: UserRepository = Depends(UserRepository.get_dependency),
 ):
     return await repository.get_by_uid(user_uid=user_uid)
