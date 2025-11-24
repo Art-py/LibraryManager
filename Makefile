@@ -36,6 +36,13 @@ linter: ## Проверка стиля и удаление неиспользу�
 test: ## Запуск тестов
 	pytest -W 'ignore' -s test/
 
+.PHONY: check-code
+check-code:  ## полная проверка кода, формат, линтер и тесты
+	ruff format .
+	ruff check . --select I --fix
+	ruff check . --fix
+	pytest -W 'ignore' -s test/
+
 .PHONY: migrations
 migrations: ## Создание новой миграции: make migrations m="description"
 	$(DC_COMP) exec $(SERVICE) poetry run alembic revision --autogenerate -m "$(m)"
