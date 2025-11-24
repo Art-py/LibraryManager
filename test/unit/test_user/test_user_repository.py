@@ -27,7 +27,7 @@ async def repository(sql_test_session: AsyncSession) -> UserRepository:
     return UserRepository(session=sql_test_session)
 
 
-class TestUsers:
+class TestUsersRepository:
     @pytest.mark.asyncio
     async def test_get_user_by_uid(
         self,
