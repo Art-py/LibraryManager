@@ -1,5 +1,6 @@
 from fastapi import Depends
 
+from src.repositories.users.enum import UserRole
 from src.repositories.users.exception import UserIsRegistered
 from src.repositories.users.model import User
 from src.repositories.users.schema import UserCreate
@@ -21,8 +22,15 @@ class UserService:
             raise UserIsRegistered('User is already registered')
 
         data = user_data.model_dump()
+
         data.pop('password', None)
         data['hashed_password'] = data.pop('password_confirm', None)
+
+        data['role'] = UserRole.READER
+
+        data['is_active'] = False
+        data['is_superuser'] = False
+        data['is_verified'] = True  # TODO переделать на False когда реализую логику верификации аккаунта
 
         user = await self.repository.create(user=User(**data))
         await self.unit.commit()
