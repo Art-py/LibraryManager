@@ -1,5 +1,6 @@
 from uuid import UUID
 
+from pydantic import EmailStr
 from sqlalchemy import select
 
 from src.repositories.core.base_repository_model import BaseRepository
@@ -18,7 +19,7 @@ class UserRepository(BaseRepository):
             raise NotFoundException(message='User not found')
         return user
 
-    async def get_by_email(self, user_email: str) -> User | None:
+    async def get_by_email(self, user_email: EmailStr | str) -> User | None:
         """Получить пользователя по email"""
         result = await self._session.execute(select(User).where(User.email == user_email))
         return result.scalar_one_or_none()

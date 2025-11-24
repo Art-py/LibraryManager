@@ -4,8 +4,8 @@ from fastapi.params import Depends
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from db import get_async_session
-from repositories.utils.db_error_mapper import map_integrity_error
+from src.db import get_async_session
+from src.repositories.utils.db_error_mapper import map_integrity_error
 
 
 class BaseUOW(ABC):
@@ -15,8 +15,12 @@ class BaseUOW(ABC):
 
     session: AsyncSession
 
-    def __init__(self, session: AsyncSession = Depends(get_async_session)):
+    def __init__(self, session: AsyncSession):
         self.session = session
+
+    @classmethod
+    async def get_dependency(cls, session: AsyncSession = Depends(get_async_session)):
+        return cls(session=session)
 
     async def flash(self):
         """Применяет все накопленные изменения в транзакции, данное действие можно откатить"""

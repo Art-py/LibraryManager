@@ -3,8 +3,8 @@ import uuid6
 from fastapi import status
 from httpx import AsyncClient
 
-from src.adapters.api.v1.users.schema import UserResponse
 from src.repositories.users.model import User
+from src.repositories.users.schema import UserResponse
 
 USER_URL = '/api/v1/users'
 
