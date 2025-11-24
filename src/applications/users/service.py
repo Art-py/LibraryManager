@@ -1,11 +1,30 @@
 from fastapi import Depends
 
-from repositories.users.uow import UserUOW
+from src.repositories.users.exception import UserIsRegistered
+from src.repositories.users.model import User
+from src.repositories.users.schema import UserCreate
+from src.repositories.users.uow import UserUOW
 
 
 class UserService:
-    def __init__(self, unit: UserUOW = Depends(UserUOW)):
+    def __init__(self, unit: UserUOW):
         self.unit = unit
+        self.repository = self.unit.get_user_repository()
 
-    async def create_user(self):
-        pass
+    @classmethod
+    async def get_dependency(cls, unit: UserUOW = Depends(UserUOW.get_dependency)):
+        return cls(unit=unit)
+
+    async def user_create(self, user_data: UserCreate) -> User:
+        user = await self.repository.get_by_email(user_email=user_data.email)
+        if user is not None:
+            raise UserIsRegistered('User is already registered')
+
+        data = user_data.model_dump()
+        data.pop('password', None)
+        data['hashed_password'] = data.pop('password_confirm', None)
+
+        user = await self.repository.create(user=User(**data))
+        await self.unit.commit()
+
+        return user
