@@ -2,20 +2,20 @@ import pytest
 import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.applications.users.service import UserService
+from src.applications.users.create_user_handler import CreateUserHandler
 from src.repositories.users.schema import UserCreate
 from src.repositories.users.uow import UserUOW
 from test.core.factories.user import UserFactory
 
 
 @pytest_asyncio.fixture()
-async def user_service(sql_test_session: AsyncSession) -> UserService:
-    return UserService(unit=UserUOW(session=sql_test_session))
+async def user_handler(sql_test_session: AsyncSession) -> CreateUserHandler:
+    return CreateUserHandler(unit=UserUOW(session=sql_test_session))
 
 
-class TestUsersService:
+class TestUsersHandler:
     @pytest.mark.asyncio
-    async def test_user_create_success(self, user_service: UserService):
+    async def test_user_create_success(self, user_handler: CreateUserHandler):
         user_data = UserFactory.build()
 
         create_data = {
@@ -27,7 +27,7 @@ class TestUsersService:
             'password_confirm': '123123123',
         }
 
-        created_user = await user_service.user_create(UserCreate(**create_data))
+        created_user = await user_handler.handle(UserCreate(**create_data))
 
         assert created_user.uid is not None
 

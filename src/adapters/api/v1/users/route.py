@@ -2,7 +2,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, status
 
-from src.applications.users.service import UserService
+from src.applications.users.create_user_handler import CreateUserHandler
 from src.repositories.users.repository import UserRepository
 from src.repositories.users.schema import UserCreate, UserResponse
 
@@ -27,9 +27,9 @@ router = APIRouter(prefix='/users', tags=['Пользователи'])
 )
 async def user_register(
     user_data: UserCreate,
-    service: UserService = Depends(UserService.get_dependency),
+    handler: CreateUserHandler = Depends(CreateUserHandler.get_dependency),
 ):
-    return await service.user_create(user_data)
+    return await handler.handle(user_data)
 
 
 @router.get(

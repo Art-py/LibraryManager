@@ -7,7 +7,7 @@ from src.repositories.users.schema import UserCreate
 from src.repositories.users.uow import UserUOW
 
 
-class UserService:
+class CreateUserHandler:
     def __init__(self, unit: UserUOW):
         self.unit = unit
         self.repository = self.unit.get_user_repository()
@@ -16,7 +16,7 @@ class UserService:
     async def get_dependency(cls, unit: UserUOW = Depends(UserUOW.get_dependency)):
         return cls(unit=unit)
 
-    async def user_create(self, user_data: UserCreate) -> User:
+    async def handle(self, user_data: UserCreate) -> User:
         user = await self.repository.get_by_email(user_email=user_data.email)
         if user is not None:
             raise UserIsRegistered('User is already registered')
