@@ -6,8 +6,10 @@ from fastapi import status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.repositories.core.exceptions.http_exceptions import NotFoundException
+from src.repositories.users.enum import UserRole
 from src.repositories.users.model import User
 from src.repositories.users.repository import UserRepository
+from test.core.factories.user import UserFactory
 from test.core.utils import model_to_dict
 
 faker = Faker(locale='ru')
@@ -66,3 +68,33 @@ class TestUsersRepository:
     ):
         result = await repository.get_by_email(faker.email())
         assert result is None
+
+    @pytest.mark.asyncio
+    async def test_user_create(
+        self,
+        sql_test_session: AsyncSession,
+        repository: UserRepository,
+    ):
+        user_data = UserFactory.build()
+
+        create_data = {
+            'first_name': user_data.first_name,
+            'last_name': user_data.last_name,
+            'email': user_data.email,
+            'hashed_password': '123123123',
+            'role': UserRole.READER,
+            'is_active': False,
+            'is_superuser': False,
+            'is_verified': False,
+        }
+        created_user = await repository.create(User(**create_data))
+        await sql_test_session.commit()
+
+        assert created_user.uid is not None
+        assert created_user.first_name == create_data['first_name']
+        assert created_user.last_name == create_data['last_name']
+        assert created_user.email == create_data['email']
+        assert created_user.role == UserRole.READER
+        assert not created_user.is_active
+        assert not created_user.is_superuser
+        assert not created_user.is_verified
