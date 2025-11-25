@@ -3,8 +3,8 @@ import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.applications.users.create_user_handler import CreateUserHandler
-from src.repositories.users.schema import UserCreate
-from src.repositories.users.uow import UserUOW
+from src.domains.users.schema import UserCreate
+from src.domains.users.uow import UserUOW
 from test.core.factories.user import UserFactory
 
 

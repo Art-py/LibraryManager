@@ -1,6 +1,6 @@
 import pytest
 
-from src.repositories.utils.utils import camel_case_to_snake_case
+from src.domains.utils.utils import camel_case_to_snake_case
 
 
 @pytest.mark.asyncio

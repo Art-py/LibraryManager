@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.db import get_async_session
-from src.repositories.utils.db_error_mapper import map_integrity_error
+from src.domains.utils.db_error_mapper import map_integrity_error
 
 
 class BaseUOW(ABC):

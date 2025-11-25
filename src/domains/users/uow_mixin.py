@@ -1,5 +1,5 @@
-from src.repositories.core.base_uow_mixin import BaseUOWMixin
-from src.repositories.users.repository import UserRepository
+from src.domains.core.base_uow_mixin import BaseUOWMixin
+from src.domains.users.repository import UserRepository
 
 
 class UserUOWMixin(BaseUOWMixin):

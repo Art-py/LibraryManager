@@ -3,9 +3,9 @@ from uuid import UUID
 from pydantic import EmailStr
 from sqlalchemy import select
 
-from src.repositories.core.base_repository_model import BaseRepository
-from src.repositories.core.exceptions.http_exceptions import NotFoundException
-from src.repositories.users.model import User
+from src.domains.core.base_repository_model import BaseRepository
+from src.domains.core.exceptions.http_exceptions import NotFoundException
+from src.domains.users.model import User
 
 
 class UserRepository(BaseRepository):

@@ -1,7 +1,7 @@
 import asyncpg
 from sqlalchemy.exc import IntegrityError
 
-from src.repositories.core.exceptions.db_exceptions import (
+from src.domains.core.exceptions.db_exceptions import (
     CheckConstraintException,
     DBConflictException,
     DuplicateException,

@@ -1,9 +1,9 @@
 import asyncio
 
 from db import async_session_local
-from src.repositories.users.enum import UserRole
-from src.repositories.users.model import User
-from src.repositories.users.security import SecurityService
+from src.domains.users.enum import UserRole
+from src.domains.users.model import User
+from src.domains.users.security import SecurityService
 from src.settings import settings
 
 security_service = SecurityService()

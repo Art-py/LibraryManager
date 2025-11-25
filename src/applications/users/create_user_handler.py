@@ -1,14 +1,15 @@
 from fastapi import Depends
 
-from src.repositories.users.enum import UserRole
-from src.repositories.users.exception import UserIsRegistered
-from src.repositories.users.model import User
-from src.repositories.users.schema import UserCreate
-from src.repositories.users.uow import UserUOW
+from src.domains.users.enum import UserRole
+from src.domains.users.exception import UserIsRegistered
+from src.domains.users.model import User
+from src.domains.users.schema import UserCreate
+from src.domains.users.uow import UserUOW
 
 
 class CreateUserHandler:
     """Хэндлер для создания пользователя"""
+
     def __init__(self, unit: UserUOW):
         self.unit = unit
         self.repository = self.unit.get_user_repository()

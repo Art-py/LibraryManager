@@ -5,7 +5,7 @@ from sqlalchemy import DateTime, MetaData, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
 
-from src.repositories.utils.utils import camel_case_to_snake_case
+from src.domains.utils.utils import camel_case_to_snake_case
 
 CONVENTION = {
     'ix': 'ix_%(column_0_label)s',

@@ -2,7 +2,7 @@ import pytest
 import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.repositories.users.model import User
+from src.domains.users.model import User
 from test.core.factories.user import UserFactory
 
 

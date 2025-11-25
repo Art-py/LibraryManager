@@ -1,6 +1,6 @@
 from fastapi import status
 
-from src.repositories.core.base_exception import BaseException
+from src.domains.core.base_exception import BaseException
 
 
 class DBConflictException(BaseException):

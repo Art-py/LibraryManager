@@ -6,8 +6,8 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
-from src.repositories.core.base_model import BaseModel
-from src.repositories.users.model import User  # noqa F401
+from src.domains.core.base_model import BaseModel
+from src.domains.users.model import User  # noqa F401
 from src.settings import settings
 
 PLACEHOLDER_URL = 'driver://user:pass@localhost/dbname'

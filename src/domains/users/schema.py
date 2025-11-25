@@ -3,9 +3,9 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, model_validator
 
-from src.repositories.users.enum import UserRole
-from src.repositories.users.exception import PasswordNotConfirm
-from src.repositories.users.security import SecurityService
+from src.domains.users.enum import UserRole
+from src.domains.users.exception import PasswordNotConfirm
+from src.domains.users.security import SecurityService
 
 security_service = SecurityService()
 

@@ -5,10 +5,10 @@ from faker.proxy import Faker
 from fastapi import status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.repositories.core.exceptions.http_exceptions import NotFoundException
-from src.repositories.users.enum import UserRole
-from src.repositories.users.model import User
-from src.repositories.users.repository import UserRepository
+from src.domains.core.exceptions.http_exceptions import NotFoundException
+from src.domains.users.enum import UserRole
+from src.domains.users.model import User
+from src.domains.users.repository import UserRepository
 from test.core.factories.user import UserFactory
 from test.core.utils import model_to_dict
 
