@@ -37,7 +37,7 @@ test: ## Запуск тестов
 	pytest -W 'ignore' -s test/
 
 .PHONY: test-cov
-test-cov: ## Запуск тестов с покрытием тестов кода
+test-cov: ## Запуск тестов с отображением покрытия кода тестами
 	pytest --cov -W 'ignore' -s test/
 
 .PHONY: check-code
