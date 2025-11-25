@@ -19,8 +19,8 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    password: str = Field(min_length=8, max_length=50, description='Пароль, от 8 до 50 знаков')
-    password_confirm: str = Field(min_length=8, max_length=50, description='Пароль, от 8 до 50 знаков')
+    password: str = Field(min_length=8, max_length=32, description='Пароль, от 8 до 32 знаков')
+    password_confirm: str = Field(min_length=8, max_length=32, description='Пароль, от 8 до 32 знаков')
 
     @model_validator(mode='after')
     def check_password(self) -> Self:
