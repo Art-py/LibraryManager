@@ -24,7 +24,7 @@ class UserFactory(Factory):
         lambda: security_service.get_hashed_password_sync(SecretStr(faker.password(length=10)))
     )
 
-    role = FuzzyChoice([role.value for role in UserRole])
+    role = FuzzyChoice(UserRole.values())
 
     is_active = LazyFunction(lambda: faker.boolean())
     is_superuser = LazyFunction(lambda: faker.boolean())

@@ -1,7 +1,7 @@
-from enum import StrEnum
+from src.domains.core.base_enum import BaseEnum
 
 
-class UserRole(StrEnum):
+class UserRole(BaseEnum):
     READER = 'Reader'
     LIBRARIAN = 'Librarian'
     ADMINISTRATOR = 'Administrator'
