@@ -75,25 +75,21 @@ class TestUsersRepository:
         sql_test_session: AsyncSession,
         repository: UserRepository,
     ):
-        user_data = UserFactory.build()
+        user_data = UserFactory.build(
+            hashed_password='9999999999',
+            role=UserRole.READER,
+            is_active=False,
+            is_superuser=False,
+            is_verified=False,
+        )
 
-        create_data = {
-            'first_name': user_data.first_name,
-            'last_name': user_data.last_name,
-            'email': user_data.email,
-            'hashed_password': '123123123',
-            'role': UserRole.READER,
-            'is_active': False,
-            'is_superuser': False,
-            'is_verified': False,
-        }
-        created_user = await repository.create(User(**create_data))
+        created_user = await repository.create(user_data)
         await sql_test_session.commit()
 
         assert created_user.uid is not None
-        assert created_user.first_name == create_data['first_name']
-        assert created_user.last_name == create_data['last_name']
-        assert created_user.email == create_data['email']
+        assert created_user.first_name == user_data.first_name
+        assert created_user.last_name == user_data.last_name
+        assert created_user.email == user_data.email
         assert created_user.role == UserRole.READER
         assert not created_user.is_active
         assert not created_user.is_superuser
