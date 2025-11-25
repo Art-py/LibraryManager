@@ -9,7 +9,7 @@ from src.domains.users.schema import UserResponse
 USER_URL = '/api/v1/users'
 
 
-class TestUserRoute:
+class TestGetUserRoute:
     @pytest.mark.asyncio
     async def test_get_user_by_uid_success(self, client: AsyncClient, user: User):
         response = await client.get(
