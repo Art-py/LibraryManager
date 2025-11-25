@@ -8,6 +8,7 @@ from src.repositories.users.uow import UserUOW
 
 
 class CreateUserHandler:
+    """Хэндлер для создания пользователя"""
     def __init__(self, unit: UserUOW):
         self.unit = unit
         self.repository = self.unit.get_user_repository()
