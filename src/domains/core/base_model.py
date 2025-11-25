@@ -1,7 +1,7 @@
 import uuid
 
 import uuid6
-from sqlalchemy import DateTime, MetaData, func
+from sqlalchemy import DateTime, MetaData, func, inspect
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
 
@@ -30,6 +30,11 @@ class BaseModel(DeclarativeBase):
         return f'{camel_case_to_snake_case(cls.__name__)}s'
 
     metadata = MetaData(naming_convention=CONVENTION)
+
+    def get_values(self):
+        """Получить все значения полей экземпляра"""
+        inspector = inspect(self.__class__)
+        return {column.name: getattr(self, column.name) for column in inspector.columns}
 
 
 class CreatedAtMixin:
