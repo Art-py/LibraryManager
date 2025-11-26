@@ -43,12 +43,19 @@ class UserAdminSettings(CoreBaseSettings):
     USER_ADMIN_PASSWORD: SecretStr = ''
 
 
+class PasswordSettings(CoreBaseSettings):
+    JWT_SECRET: SecretStr = '(O.o)'
+    JWT_ALGORITHM: str = 'HS256'
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 5
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 1
+
+
 class Settings(CoreBaseSettings):
     DEBUG: bool = True
-    SECRET_KEY_PASSWORD: SecretStr = ''
 
     postgres: PostgresSettings = PostgresSettings()
     user_admin: UserAdminSettings = UserAdminSettings()
+    password_settings: PasswordSettings = PasswordSettings()
 
 
 settings = Settings()
