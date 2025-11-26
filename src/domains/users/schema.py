@@ -5,9 +5,6 @@ from pydantic import BaseModel, ConfigDict, EmailStr, Field, model_validator
 
 from src.domains.users.enum import UserRole
 from src.domains.users.exception import PasswordNotConfirm
-from src.domains.users.security import SecurityService
-
-security_service = SecurityService()
 
 
 class UserBase(BaseModel):
@@ -26,7 +23,7 @@ class UserCreate(UserBase):
     def check_password(self) -> Self:
         if self.password != self.password_confirm:
             raise PasswordNotConfirm(message='Password not confirm')
-        self.password_confirm = security_service.get_hashed_password_sync(self.password)
+        self.password_confirm = self.password
         return self
 
 

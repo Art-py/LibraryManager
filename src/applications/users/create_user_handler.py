@@ -4,6 +4,7 @@ from src.domains.users.enum import UserRole
 from src.domains.users.exception import UserIsRegistered
 from src.domains.users.model import User
 from src.domains.users.schema import UserCreate
+from src.domains.users.security import get_hashed_password
 from src.domains.users.uow import UserUOW
 
 
@@ -26,7 +27,7 @@ class CreateUserHandler:
         data = user_data.model_dump()
 
         data.pop('password', None)
-        data['hashed_password'] = data.pop('password_confirm', None)
+        data['hashed_password'] = await get_hashed_password(data.pop('password_confirm', None))
 
         data['role'] = UserRole.READER
 
