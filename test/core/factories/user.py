@@ -5,10 +5,7 @@ from pydantic import SecretStr
 
 from src.domains.users.enum import UserRole
 from src.domains.users.model import User
-from src.domains.users.security import SecurityService
-
-security_service = SecurityService()
-
+from src.domains.users.security import get_hashed_password_sync
 
 faker = Faker(locale='ru')
 
@@ -20,9 +17,7 @@ class UserFactory(Factory):
     last_name = LazyFunction(lambda: faker.last_name())
 
     email = LazyFunction(lambda: faker.email())
-    hashed_password = LazyFunction(
-        lambda: security_service.get_hashed_password_sync(SecretStr(faker.password(length=10)))
-    )
+    hashed_password = LazyFunction(lambda: get_hashed_password_sync(SecretStr(faker.password(length=10))))
 
     role = FuzzyChoice(UserRole.values())
 

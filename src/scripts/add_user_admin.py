@@ -3,10 +3,8 @@ import asyncio
 from db import async_session_local
 from src.domains.users.enum import UserRole
 from src.domains.users.model import User
-from src.domains.users.security import SecurityService
+from src.domains.users.security import get_hashed_password
 from src.settings import settings
-
-security_service = SecurityService()
 
 
 async def create_user_admin():
@@ -20,9 +18,7 @@ async def create_user_admin():
             'first_name': 'Admin',
             'last_name': 'Admin',
             'email': settings.user_admin.USER_ADMIN_EMAIL,
-            'hashed_password': await security_service.get_hashed_password(
-                password=settings.user_admin.USER_ADMIN_PASSWORD
-            ),
+            'hashed_password': await get_hashed_password(password=settings.user_admin.USER_ADMIN_PASSWORD),
             'role': UserRole.ADMINISTRATOR,
             'is_active': True,
             'is_superuser': True,

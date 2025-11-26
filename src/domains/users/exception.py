@@ -11,3 +11,8 @@ class PasswordNotConfirm(BaseException):
 class UserIsRegistered(BaseException):
     def __init__(self, message: str):
         super().__init__(code=status.HTTP_409_CONFLICT, message=message)
+
+
+class PasswordRequired(BaseException):
+    def __init__(self, message: str):
+        super().__init__(code=status.HTTP_400_BAD_REQUEST, message=message)
