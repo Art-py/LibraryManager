@@ -3,14 +3,17 @@ from pathlib import Path
 from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-BASE_DIR = Path(__file__).parent.parent
+BASE_DIR_ENV = str(Path(__file__).parent.parent) + '/environment'
 
 
 class CoreBaseSettings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=f'{BASE_DIR}/environment/.env', extra='ignore')
+    model_config = SettingsConfigDict(env_file=f'{BASE_DIR_ENV}/.env', extra='ignore')
 
 
-class PostgresSettings(CoreBaseSettings):
+class PostgresSettings(BaseSettings):
+
+    model_config = SettingsConfigDict(env_file=f'{BASE_DIR_ENV}/.env.postgresql', extra='ignore')
+
     POSTGRES_USER: str = ''
     POSTGRES_PASSWORD: SecretStr = ''
     POSTGRES_DB: str = ''
@@ -37,6 +40,14 @@ class PostgresSettings(CoreBaseSettings):
             f'/{self.POSTGRES_DB}'
         )
 
+class RedisSettings(BaseSettings):
+
+    model_config = SettingsConfigDict(env_file=f'{BASE_DIR_ENV}/.env.redis', extra='ignore')
+
+    REDIS_PASSWORD: SecretStr = ''
+    REDIS_USER: str = ''
+    REDIS_USER_PASSWORD: SecretStr = ''
+
 
 class UserAdminSettings(CoreBaseSettings):
     USER_ADMIN_EMAIL: str = ''
@@ -56,6 +67,7 @@ class Settings(CoreBaseSettings):
     postgres: PostgresSettings = PostgresSettings()
     user_admin: UserAdminSettings = UserAdminSettings()
     password_settings: PasswordSettings = PasswordSettings()
+    redis: RedisSettings = RedisSettings()
 
 
 settings = Settings()
