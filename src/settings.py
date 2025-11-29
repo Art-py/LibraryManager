@@ -11,7 +11,6 @@ class CoreBaseSettings(BaseSettings):
 
 
 class PostgresSettings(BaseSettings):
-
     model_config = SettingsConfigDict(env_file=f'{BASE_DIR_ENV}/.env.postgresql', extra='ignore')
 
     POSTGRES_USER: str = ''
@@ -40,13 +39,27 @@ class PostgresSettings(BaseSettings):
             f'/{self.POSTGRES_DB}'
         )
 
-class RedisSettings(BaseSettings):
 
+class RedisSettings(BaseSettings):
     model_config = SettingsConfigDict(env_file=f'{BASE_DIR_ENV}/.env.redis', extra='ignore')
 
     REDIS_PASSWORD: SecretStr = ''
     REDIS_USER: str = ''
     REDIS_USER_PASSWORD: SecretStr = ''
+
+    REDIS_HOST: str = ''
+    REDIS_PORT: int = 6379
+
+    BD_JWT_CASH: int = 0
+
+    @property
+    def redis_url(self) -> str:
+        return (
+            f'redis://{self.REDIS_USER}'
+            f':{self.REDIS_USER_PASSWORD.get_secret_value()}'
+            f'@{self.REDIS_HOST}:'
+            f'{self.REDIS_PORT}/{self.BD_JWT_CASH}'
+        )
 
 
 class UserAdminSettings(CoreBaseSettings):
