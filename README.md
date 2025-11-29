@@ -9,7 +9,10 @@
 [RoadMap](documentation/roadmap.md#roadmap)
 
 Для развертки проекта, открываем каталог [environment](environment)
-копируем в нем пример файла настроек (сохраняем как .env)
+копируем в нем пример файла настроек и сохраняем убрав слово example:
+`.env.example -> .env`
+`.env.postgresql.example -> .env.postgresql`
+`.env.redis.example -> .env.redis`
 указываем свои значения. 
 
 Далее устанавливаем зависимости проекта: `poetry install`
