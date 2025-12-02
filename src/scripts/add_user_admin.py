@@ -4,7 +4,7 @@ from db import async_session_local
 from src.domains.users.enum import UserRole
 from src.domains.users.model import User
 from src.domains.users.security import get_hashed_password
-from src.settings import settings
+from src.settings import get_admin_settings
 
 
 async def create_user_admin():
@@ -14,11 +14,14 @@ async def create_user_admin():
     """
 
     async with async_session_local() as session:
+        admin_settings = get_admin_settings()
         reg_data = {
             'first_name': 'Admin',
             'last_name': 'Admin',
-            'email': settings.user_admin.USER_ADMIN_EMAIL,
-            'hashed_password': await get_hashed_password(password=settings.user_admin.USER_ADMIN_PASSWORD),
+            'email': admin_settings.USER_ADMIN_EMAIL,
+            'hashed_password': await get_hashed_password(
+                password=admin_settings.USER_ADMIN_PASSWORD.get_secret_value()
+            ),
             'role': UserRole.ADMINISTRATOR,
             'is_active': True,
             'is_superuser': True,

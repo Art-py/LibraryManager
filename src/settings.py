@@ -83,4 +83,21 @@ class Settings(CoreBaseSettings):
     redis: RedisSettings = RedisSettings()
 
 
-settings = Settings()
+def get_main_settings() -> Settings:
+    return Settings()
+
+
+def get_postgres_settings() -> PostgresSettings:
+    return Settings().postgres
+
+
+def get_redis_settings() -> RedisSettings:
+    return Settings().redis
+
+
+def get_admin_settings() -> UserAdminSettings:
+    return Settings().user_admin
+
+
+def get_password_settings() -> PasswordSettings:
+    return Settings().password_settings

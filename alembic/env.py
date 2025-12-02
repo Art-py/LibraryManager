@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from alembic import context
 from src.domains.core.base_model import BaseModel
 from src.domains.users.model import User  # noqa F401
-from src.settings import settings
+from src.settings import get_postgres_settings
 
 PLACEHOLDER_URL = 'driver://user:pass@localhost/dbname'
 
@@ -20,7 +20,7 @@ if config.get_main_option('sqlalchemy.url') == PLACEHOLDER_URL:
     config.set_section_option(
         section='alembic',
         name='sqlalchemy.url',
-        value=settings.postgres.POSTGRES_ASYNC_URL,
+        value=get_postgres_settings().POSTGRES_ASYNC_URL,
     )
 
 # Interpret the config file for Python logging.
