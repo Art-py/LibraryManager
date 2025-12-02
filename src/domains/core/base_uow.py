@@ -1,4 +1,3 @@
-from abc import ABC
 
 from fastapi.params import Depends
 from sqlalchemy.exc import IntegrityError
@@ -8,7 +7,7 @@ from src.db import get_async_session
 from src.domains.utils.db_error_mapper import map_integrity_error
 
 
-class BaseUOW(ABC):
+class BaseUOW:
     """
     Базовый класс UOW содержит в себе методы для управления транзакциями
     """
