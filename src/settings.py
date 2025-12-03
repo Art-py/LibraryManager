@@ -74,30 +74,25 @@ class PasswordSettings(CoreBaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 1
 
 
-class Settings(CoreBaseSettings):
+class MainSettings(CoreBaseSettings):
     DEBUG: bool = True
 
-    postgres: PostgresSettings = PostgresSettings()
-    user_admin: UserAdminSettings = UserAdminSettings()
-    password_settings: PasswordSettings = PasswordSettings()
-    redis: RedisSettings = RedisSettings()
 
-
-def get_main_settings() -> Settings:
-    return Settings()
+def get_main_settings() -> MainSettings:
+    return MainSettings()
 
 
 def get_postgres_settings() -> PostgresSettings:
-    return Settings().postgres
+    return PostgresSettings()
 
 
 def get_redis_settings() -> RedisSettings:
-    return Settings().redis
+    return RedisSettings()
 
 
 def get_admin_settings() -> UserAdminSettings:
-    return Settings().user_admin
+    return UserAdminSettings()
 
 
 def get_password_settings() -> PasswordSettings:
-    return Settings().password_settings
+    return PasswordSettings()
