@@ -25,7 +25,7 @@ async def assert_models_equal(obj1, obj2, exclude: set[str] = None):
 
 @pytest_asyncio.fixture()
 async def repository(sql_test_session: AsyncSession) -> UserRepository:
-    """Создание экземпляра UsersRepository."""
+    """Создание экземпляра UsersRepository"""
     return UserRepository(session=sql_test_session)
 
 
