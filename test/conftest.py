@@ -6,6 +6,7 @@ import pytest
 import pytest_asyncio
 from alembic.config import Config
 from httpx import ASGITransport, AsyncClient
+from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from testcontainers.postgres import PostgresContainer
 from testcontainers.redis import AsyncRedisContainer
@@ -72,7 +73,7 @@ async def test_engine(postgres_container):
 
 
 @pytest_asyncio.fixture()
-async def test_redis_client(async_redis_container):
+async def test_redis_client(async_redis_container) -> AsyncGenerator[Redis, None]:
     async_client = await async_redis_container.get_async_client()
 
     await async_client.flushdb(asynchronous=True)
