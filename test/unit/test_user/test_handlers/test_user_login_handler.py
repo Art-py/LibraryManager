@@ -50,6 +50,11 @@ class TestLoginUserHandler:
             assert 'Secure' in c
             assert 'SameSite=lax' in c
 
+        # проверка, что access и refresh токены разные
+        access_cookie = next(c for c in cookies if 'LM_user_access_token=' in c)
+        refresh_cookie = next(c for c in cookies if 'LM_user_refresh_token=' in c)
+        assert access_cookie != refresh_cookie
+
     @pytest.mark.asyncio
     @pytest.mark.parametrize(
         'user',
