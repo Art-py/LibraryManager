@@ -1,10 +1,12 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Response, status
 
 from src.applications.users.create_user_handler import CreateUserHandler
+from src.applications.users.login_user_handler import LoginUserHandler
+from src.domains.auth.schema import TokensResponse
 from src.domains.users.repository import UserRepository
-from src.domains.users.schema import UserCreate, UserResponse
+from src.domains.users.schema import UserCreate, UserLogin, UserResponse
 
 router = APIRouter(prefix='/users', tags=['Пользователи'])
 
@@ -30,6 +32,26 @@ async def user_register(
     handler: CreateUserHandler = Depends(CreateUserHandler.get_dependency),
 ):
     return await handler.handle(user_data)
+
+
+@router.post(
+    path='/login',
+    response_model=TokensResponse,
+    responses={
+        status.HTTP_200_OK: {
+            'model': TokensResponse,
+        },
+        status.HTTP_401_UNAUTHORIZED: {
+            'description': 'Invalid credentials',
+        },
+    },
+)
+async def user_login(
+    user_data: UserLogin,
+    response: Response,
+    handler: LoginUserHandler = Depends(LoginUserHandler.get_dependency),
+):
+    return await handler.handle(user_data, response)
 
 
 @router.get(

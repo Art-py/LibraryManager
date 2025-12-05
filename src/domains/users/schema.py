@@ -4,7 +4,7 @@ from uuid import UUID
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, model_validator
 
 from src.domains.users.enum import UserRole
-from src.domains.users.exception import PasswordNotConfirm
+from src.domains.users.exception import InvalidPassword
 
 
 class UserBase(BaseModel):
@@ -22,9 +22,14 @@ class UserCreate(UserBase):
     @model_validator(mode='after')
     def check_password(self) -> Self:
         if self.password != self.password_confirm:
-            raise PasswordNotConfirm(message='Password not confirm')
+            raise InvalidPassword(message='Password not confirm')
         self.password_confirm = self.password
         return self
+
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str = Field(min_length=8, max_length=32, description='Пароль, от 8 до 32 знаков')
 
 
 class UserResponse(UserBase):
