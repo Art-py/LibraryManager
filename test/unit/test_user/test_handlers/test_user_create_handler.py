@@ -16,7 +16,7 @@ async def user_handler(sql_test_session: AsyncSession) -> CreateUserHandler:
     return CreateUserHandler(unit=UserUOW(session=sql_test_session))
 
 
-class TestUsersHandler:
+class TestCreateUsersHandler:
     @pytest.mark.asyncio
     async def test_user_create_success(self, user_handler: CreateUserHandler):
         user_data = UserFactory.build()
