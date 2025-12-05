@@ -38,4 +38,4 @@ class LoginUserHandler:
 
         await set_tokens(response, tokens)
 
-        return tokens
+        return {'success': True}
