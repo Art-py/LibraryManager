@@ -33,7 +33,7 @@ async def postgres_container():
     """
     Поднимаем временный Postgres контейнер на всю тестовую сессию
     """
-    container = PostgresContainer('postgres:17-alpine')
+    container = PostgresContainer(image='postgres:17-alpine', driver='asyncpg')
     container.start()
     try:
         yield container
@@ -57,7 +57,7 @@ async def async_redis_container():
 async def apply_migrations(postgres_container):
     """Применяем миграции Alembic к тестовой БД"""
     config = Config('alembic.ini')
-    async_url = postgres_container.get_connection_url().replace('postgresql+psycopg2', 'postgresql+asyncpg')
+    async_url = postgres_container.get_connection_url()
     config.set_main_option('sqlalchemy.url', async_url)
     await to_thread(command.upgrade, config, 'head')
     yield
@@ -66,7 +66,7 @@ async def apply_migrations(postgres_container):
 @pytest_asyncio.fixture()
 async def test_engine(postgres_container):
     """Создаем асинхронный SQLAlchemy engine на контейнере"""
-    async_url = postgres_container.get_connection_url().replace('postgresql+psycopg2', 'postgresql+asyncpg')
+    async_url = postgres_container.get_connection_url()
     engine = create_async_engine(async_url, echo=False)
     yield engine
     await engine.dispose()
