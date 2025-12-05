@@ -49,17 +49,15 @@ async def create_refresh_token(data: dict, date: datetime) -> str:
     )
 
 
-async def create_tokens(data: dict) -> dict:
+async def create_tokens(user_uid: str) -> dict:
     """
     Создание пары токенов access и refresh
-
-    :data (dict): словарь с данными для включения в токен -> {"sub": "uid пользователя"}
-
     """
     now = datetime.now(UTC)
+    data = {'sub': user_uid}
     return {
-        'access_token': create_access_token(data, now),
-        'refresh_token': create_refresh_token(data, now),
+        'access_token': await create_access_token(data, now),
+        'refresh_token': await create_refresh_token(data, now),
     }
 
 
