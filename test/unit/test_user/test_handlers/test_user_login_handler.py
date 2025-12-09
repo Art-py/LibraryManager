@@ -21,6 +21,12 @@ async def user_handler(sql_test_session: AsyncSession, test_redis_client: Redis)
     )
 
 
+@pytest_asyncio.fixture
+async def token_repository(test_redis_client: Redis) -> TokenRepository:
+    """Создание экземпляра TokenRepository"""
+    return TokenRepository(redis_client=test_redis_client)
+
+
 class TestLoginUserHandler:
     @pytest.mark.asyncio
     @pytest.mark.parametrize(
@@ -28,7 +34,9 @@ class TestLoginUserHandler:
         [{'email': 'user1@email.com', 'hashed_password': get_hashed_password_sync('123123123')}],
         indirect=True,
     )
-    async def test_login_user_success(self, user: User, user_handler: LoginUserHandler):
+    async def test_login_user_success(
+        self, user: User, user_handler: LoginUserHandler, token_repository: TokenRepository
+    ):
         data_for_login = {'email': 'user1@email.com', 'password': '123123123'}
         user_login = UserLogin(**data_for_login)
 
@@ -54,6 +62,9 @@ class TestLoginUserHandler:
         access_cookie = next(c for c in cookies if 'LM_user_access_token=' in c)
         refresh_cookie = next(c for c in cookies if 'LM_user_refresh_token=' in c)
         assert access_cookie != refresh_cookie
+
+        # проверяем что в редис установлен токен
+        assert await token_repository.exist(str(user.uid))
 
     @pytest.mark.asyncio
     @pytest.mark.parametrize(
