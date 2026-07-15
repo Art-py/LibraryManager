@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Response, status
 
 from src.applications.users.create_user_handler import CreateUserHandler
 from src.applications.users.login_user_handler import LoginUserHandler
-from src.domains.auth.schema import TokensResponse
+from src.domains.auth.schema import LoginSuccess
 from src.domains.users.repository import UserRepository
 from src.domains.users.schema import UserCreate, UserLogin, UserResponse
 
@@ -36,10 +36,10 @@ async def user_register(
 
 @router.post(
     path='/login',
-    response_model=TokensResponse,
+    response_model=LoginSuccess,
     responses={
         status.HTTP_200_OK: {
-            'model': TokensResponse,
+            'model': LoginSuccess,
         },
         status.HTTP_401_UNAUTHORIZED: {
             'description': 'Invalid credentials',
