@@ -1,26 +1,28 @@
 FROM python:3.12-slim AS core
 
-ENV POETRY_VERSION=2.2.1
-ENV PATH="/root/.local/bin:$PATH"
+COPY --from=ghcr.io/astral-sh/uv:0.9.9 /uv /uvx /bin/
+
+ENV UV_COMPILE_BYTECODE=1
+ENV UV_LINK_MODE=copy
 
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libpq-dev \
-    curl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN curl -sSL https://install.python-poetry.org | python3 -
+COPY pyproject.toml uv.lock ./
 
-COPY pyproject.toml poetry.lock* ./
-
-RUN poetry install --only main --no-root --no-interaction --no-ansi
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --locked --no-dev --no-install-project
 
 FROM python:3.12-slim AS runtime
 
-ENV PATH="/root/.local/bin:$PATH"
+COPY --from=ghcr.io/astral-sh/uv:0.9.9 /uv /uvx /bin/
+
+ENV PATH="/app/.venv/bin:$PATH"
 ENV PYTHONPATH="/app/src:$PYTHONPATH"
 
 WORKDIR /app
@@ -30,10 +32,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=core /root/.cache/pypoetry /root/.cache/pypoetry
-COPY --from=core /root/.local /root/.local
+COPY --from=core /app/.venv /app/.venv
 
-COPY pyproject.toml poetry.lock* ./
+COPY pyproject.toml uv.lock ./
 
 COPY ./src ./src
 COPY ./alembic ./alembic

@@ -1,5 +1,6 @@
-DC_COMP := docker-compose
+DC_COMP := docker compose
 SERVICE := backend
+UV := uv
 
 .PHONY: list
 list: ## Показать список всех команд
@@ -25,36 +26,36 @@ down:  ## Удалить контейнеры
 
 .PHONY: format
 format: ## Форматирование кода
-	ruff format .
-	ruff check . --select I --fix
+	$(UV) run ruff format .
+	$(UV) run ruff check . --select I --fix
 
 .PHONY: linter
 linter: ## Проверка стиля и удаление неиспользуемых импортов
-	ruff check . --fix
+	$(UV) run ruff check . --fix
 
 .PHONY: test
 test: ## Запуск тестов
-	pytest -W 'ignore' -s test/
+	$(UV) run pytest -W 'ignore' -s test/
 
 .PHONY: test-cov
 test-cov: ## Запуск тестов с отображением покрытия кода тестами
-	pytest --cov -W 'ignore' -s test/
+	$(UV) run pytest --cov -W 'ignore' -s test/
 
 .PHONY: check-code
 check-code:  ## полная проверка кода, формат, линтер и тесты
-	ruff format .
-	ruff check . --select I --fix
-	ruff check . --fix
-	pytest -W 'ignore' -s test/
+	$(UV) run ruff format .
+	$(UV) run ruff check . --select I --fix
+	$(UV) run ruff check . --fix
+	$(UV) run pytest -W 'ignore' -s test/
 
 .PHONY: migrations
 migrations: ## Создание новой миграции: make migrations m="description"
-	$(DC_COMP) exec $(SERVICE) poetry run alembic revision --autogenerate -m "$(m)"
+	$(DC_COMP) exec $(SERVICE) uv run --no-sync alembic revision --autogenerate -m "$(m)"
 
 .PHONY: migrate
 migrate: ## Применение всех миграций
-	$(DC_COMP) exec $(SERVICE) poetry run alembic upgrade head
+	$(DC_COMP) exec $(SERVICE) uv run --no-sync alembic upgrade head
 
 .PHONY: downgrade
 downgrade: ## Откат последней миграции
-	$(DC_COMP) exec $(SERVICE) poetry run alembic downgrade -1
+	$(DC_COMP) exec $(SERVICE) uv run --no-sync alembic downgrade -1
