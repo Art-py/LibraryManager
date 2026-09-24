@@ -6,9 +6,9 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
-from src.domains.core.base_model import BaseModel
-from src.domains.users.model import User  # noqa F401
-from src.settings import get_postgres_settings
+from src.infrastructure.config.settings import get_postgres_settings
+from src.infrastructure.database.base import OrmBase
+from src.infrastructure.database.models.user import UserRecord  # noqa: F401
 
 PLACEHOLDER_URL = 'driver://user:pass@localhost/dbname'
 
@@ -20,7 +20,7 @@ if config.get_main_option('sqlalchemy.url') == PLACEHOLDER_URL:
     config.set_section_option(
         section='alembic',
         name='sqlalchemy.url',
-        value=get_postgres_settings().POSTGRES_ASYNC_URL,
+        value=get_postgres_settings().async_url,
     )
 
 # Interpret the config file for Python logging.
@@ -32,7 +32,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = BaseModel.metadata
+target_metadata = OrmBase.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

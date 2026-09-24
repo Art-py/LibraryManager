@@ -1,19 +1,19 @@
 import uvicorn
 from fastapi import FastAPI
-from fastapi.responses import JSONResponse
 
-from src.adapters.api import routers_v1
-
-app = FastAPI(
-    title='Library Manager',
-)
-
-app.include_router(routers_v1, prefix='/api')
+from src.presentation.api import system_router, v1_router
+from src.presentation.api.errors import register_exception_handlers
 
 
-@app.get(path='/healthcheck', tags=['System'])
-def healthcheck():
-    return JSONResponse({'status': 'ok'})
+def create_app() -> FastAPI:
+    application = FastAPI(title='Library Manager')
+    application.include_router(v1_router, prefix='/api')
+    application.include_router(system_router)
+    register_exception_handlers(application)
+    return application
+
+
+app = create_app()
 
 
 if __name__ == '__main__':

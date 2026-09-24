@@ -10,7 +10,8 @@ from testcontainers.community.postgres import PostgresContainer
 from testcontainers.community.redis import AsyncRedisContainer
 
 from alembic import command
-from src.db import get_async_session, get_redis_client
+from src.infrastructure.cache.client import get_redis_client
+from src.infrastructure.database.session import get_async_session
 from src.main import app
 
 # Инициализация фикстур
